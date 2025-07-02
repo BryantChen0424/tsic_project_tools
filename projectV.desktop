@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=projectV
+Exec=/home/verilog/Desktop/dlab/.private/projectV_dev/projectV.py
+Icon=/home/verilog/Desktop/dlab/.private/projectV_dev/projectV.png
+Terminal=true
+Categories=Utility;
+StartupWMClass=projectV
