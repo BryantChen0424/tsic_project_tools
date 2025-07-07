@@ -30,11 +30,11 @@ class ProjectResetApp(Gtk.Window):
         btn_reload.connect("clicked", self.on_reload_project_clicked)
         vbox.pack_start(btn_reload, False, False, 0)
 
-        btn_open_vscode = Gtk.Button(label="Edit Code")
+        btn_open_vscode = Gtk.Button(label="Code Editor")
         btn_open_vscode.connect("clicked", self.on_open_vscode_clicked)
         vbox.pack_start(btn_open_vscode, False, False, 0)
 
-        btn_run_gui = Gtk.Button(label="Run the game")
+        btn_run_gui = Gtk.Button(label="Run The Game")
         btn_run_gui.connect("clicked", self.on_run_gui_clicked)
         vbox.pack_start(btn_run_gui, False, False, 0)
 
@@ -49,11 +49,10 @@ class ProjectResetApp(Gtk.Window):
         danger_label = Gtk.Label()
         danger_label.set_markup('<span foreground="red" weight="bold">Dangerous zone below! Proceed with caution.</span>')
         danger_label.set_name("danger-label")
-
+        
         self.entry = Gtk.Entry()
         self.entry.set_placeholder_text("Enter student name...")
-        vbox.pack_end(self.entry, False, False, 0)
-
+        
         btn_get = Gtk.Button(label="Get Project")
         btn_get.connect("clicked", self.on_get_project_clicked)
         vbox.pack_end(btn_get, False, False, 0)
@@ -161,8 +160,15 @@ class ProjectResetApp(Gtk.Window):
             self.show_error("No project loaded.")
             return
         try:
-            subprocess.run(["make", "run-gui"], cwd=self.current_dlab_path)
-            self.update_sim_log(self.current_dlab_path)
+            result = subprocess.run(["make", "run-gui"], cwd=self.current_dlab_path,
+                                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+            self.log_buffer.set_text(result.stdout)
+            if result.returncode != 0:
+                self.show_error("make run-gui failed. See log for details.")
+            else:
+                self.update_sim_log(self.current_dlab_path)
+        except Exception as e:
+            self.show_error(str(e))
         except Exception as e:
             self.show_error(str(e))
 
