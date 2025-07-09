@@ -30,11 +30,15 @@ class ProjectResetApp(Gtk.Window):
         btn_reload.connect("clicked", self.on_reload_project_clicked)
         vbox.pack_start(btn_reload, False, False, 0)
 
+        btn_open_spec = Gtk.Button(label="Open Spec")
+        btn_open_spec.connect("clicked", self.on_open_spec_clicked)
+        vbox.pack_start(btn_open_spec, False, False, 0)
+
         btn_open_vscode = Gtk.Button(label="Code Editor")
         btn_open_vscode.connect("clicked", self.on_open_vscode_clicked)
         vbox.pack_start(btn_open_vscode, False, False, 0)
 
-        btn_run_gui = Gtk.Button(label="Run The Game")
+        btn_run_gui = Gtk.Button(label="Play The Game")
         btn_run_gui.connect("clicked", self.on_run_gui_clicked)
         vbox.pack_start(btn_run_gui, False, False, 0)
 
@@ -246,6 +250,24 @@ class ProjectResetApp(Gtk.Window):
             subprocess.Popen(["code", design_path, "--goto"] + glob(os.path.join(design_path, "*.v")))
         except Exception as e:
             self.show_error(f"Failed to open VSCode: {str(e)}")
+
+    def on_open_spec_clicked(self, widget):
+        if not self.current_dlab_path:
+            self.show_error("No project loaded. Use Get or Reload Project first.")
+            return
+        spec_path = os.path.join(self.current_dlab_path, "ref", "spec.url")
+        if not os.path.isfile(spec_path):
+            self.show_error("spec.url not found in ref/ folder.")
+            return
+        with open(spec_path) as f:
+            url = f.read().strip()
+            if not url.startswith("http"):
+                self.show_error("Invalid URL in spec.url")
+                return
+        try:
+            subprocess.Popen(["xdg-open", url])
+        except Exception as e:
+            self.show_error(f"Failed to open URL: {str(e)}")
 
     def show_error(self, message):
         dialog = Gtk.MessageDialog(
