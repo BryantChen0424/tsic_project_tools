@@ -99,7 +99,7 @@ class ProjectResetApp(Gtk.Window):
             self.show_error("Missing environment variables.")
             return
 
-        hashed_file = os.path.join(DLAB_ROOT, ".private", "hashed_students")
+        hashed_file = os.path.join(DLAB_ROOT, ".private", "projectV_dev", "hashed_students")
         hashed = hash_name(student_name)
 
         student_id = None
