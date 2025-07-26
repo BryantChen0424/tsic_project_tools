@@ -96,8 +96,11 @@ class ProjectResetApp(Gtk.Window):
         DEV_ROOT = os.environ.get("PROJECT_DEV_ROOT")
         PUB_ROOT = os.environ.get("PROJECT_PUBLIC_ROOT")
         if not all([DLAB_ROOT, DEV_ROOT, PUB_ROOT]):
-            self.show_error("Missing environment variables.")
-            return
+            # self.show_error("Missing environment variables.")
+            # return
+            DLAB_ROOT = "/home/verilog/Desktop/dlab/"
+            DEV_ROOT = "/home/verilog/Desktop/dlab/.private/project/"
+            PUB_ROOT = "/home/verilog/Desktop/dlab/public/project/"
 
         hashed_file = os.path.join(DLAB_ROOT, ".private", "projectV_dev", "hashed_students")
         hashed = hash_name(student_name)
